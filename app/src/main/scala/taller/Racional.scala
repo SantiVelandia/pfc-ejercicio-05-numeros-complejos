@@ -7,34 +7,68 @@ package taller
   * Tal como está compila y las pruebas quedan en rojo.
   */
 class Racional(x: Int, y: Int) {
-
-  // Precondición del constructor: el denominador no es cero.
-  // Completar
-
+  require(y!=0, "el denominador no puede ser cero")
   // El máximo común divisor de dos enteros no negativos.
-  private def mcd(a: Int, b: Int): Int = 0 // Completar
+  private def mcd(a: Int, b: Int): Int = {
+    if (b == 0)
+      a
+    else
+      mcd(b, a % b)
+  } // Completar
 
   // Numerador y denominador ya normalizados.
-  def numer: Int = 0 // Completar
+  def numer: Int ={
+    val nuevaX = math.abs(x)
+    val nuevaY = math.abs(y)
+    val divisor = mcd(nuevaX,nuevaY)
+    if (nuevaX==0)
+      0
+    else if (x<0 ^ y<0)
+      (nuevaX/divisor)*(-1)
+    else (nuevaX/divisor)
+  }
+  def denom: Int = {
+    val nuevaX = math.abs(x)
+    val nuevaY = math.abs(y)
+    val divisor = mcd(nuevaX,nuevaY)
+    if (numer==0)
+      1
+    else (nuevaY/divisor)
+  }
 
-  def denom: Int = 1 // Completar
+  def +(r: Racional): Racional = {
+    new Racional((r.numer*denom)+(r.denom*numer),r.denom*denom)
+  }
 
-  def +(r: Racional): Racional = new Racional(0, 1) // Completar
+  def -(r: Racional): Racional = new Racional(numer*r.denom-r.numer*denom,r.denom*denom)
 
-  def -(r: Racional): Racional = new Racional(0, 1) // Completar
+  def *(r: Racional): Racional = new Racional(r.numer*numer,r.denom*denom)
 
-  def *(r: Racional): Racional = new Racional(0, 1) // Completar
-
-  def /(r: Racional): Racional = new Racional(0, 1) // Completar
+  def /(r: Racional): Racional = {
+    require(r.numer != 0, "no se puede dividir por cero")
+    new Racional(numer * r.denom, denom * r.numer)
+  }
 
   // Si los dos racionales representan el mismo número.
-  def ==(r: Racional): Boolean = false // Completar
+  def ==(r: Racional): Boolean = {
+    if (r.numer==numer && r.denom==denom)
+      true
+    else false
+  }
 
-  def <(r: Racional): Boolean = false // Completar
+  def <(r: Racional): Boolean = {
+    numer*r.denom<r.numer*denom
+  }
 
   // El mayor de los dos.
-  def max(r: Racional): Racional = new Racional(0, 1) // Completar
+  def max(r: Racional): Racional = {
+    if (this < r ) r
+    else this
+  }
 
   // "n/d", o solo "n" cuando el denominador es 1.
-  override def toString: String = "" // Completar
+  override def toString: String = {
+    if (denom == 1) numer.toString
+    else ""+numer+"/"+denom+""
+  }
 }
